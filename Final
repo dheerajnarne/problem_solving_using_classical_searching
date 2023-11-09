@@ -1,18 +1,12 @@
 import numpy as np
 
-def needleman_wunsch(seq_a, seq_b, match=1, mismatch=-1, gap_penalty=-2):
+def Alg(seq_a, seq_b, match=1, mismatch=-1, gap_penalty=-2):
     len_a, len_b = len(seq_a), len(seq_b)
-
-    # Create a matrix to store the scores for each position in the sequences
     score_matrix = np.zeros((len_a + 1, len_b + 1))
-
-    # Initialize the first row and column with gap penalties
     for i in range(len_a + 1):
         score_matrix[i][0] = i * gap_penalty
     for j in range(len_b + 1):
         score_matrix[0][j] = j * gap_penalty
-
-    # Fill in the score matrix
     for i in range(1, len_a + 1):
         for j in range(1, len_b + 1):
             if seq_a[i - 1] == seq_b[j - 1]:
@@ -24,8 +18,6 @@ def needleman_wunsch(seq_a, seq_b, match=1, mismatch=-1, gap_penalty=-2):
             insert_score = score_matrix[i][j - 1] + gap_penalty
 
             score_matrix[i][j] = max(match_score, delete_score, insert_score)
-
-    # Traceback to find the aligned sequences
     align_a, align_b = "", ""
     i, j = len_a, len_b
     while i > 0 or j > 0:
@@ -44,11 +36,9 @@ def needleman_wunsch(seq_a, seq_b, match=1, mismatch=-1, gap_penalty=-2):
             j -= 1
 
     return score_matrix[len_a][len_b], align_a, align_b
-
-# Example Usage
-sequence_a = "AGTACG"
-sequence_b = "AGTACCG"
-score, aligned_a, aligned_b = needleman_wunsch(sequence_a, sequence_b)
+sequence_a = input("Enter the first string")
+sequence_b = input("Enter the second string")
+score, aligned_a, aligned_b = Alg(sequence_a, sequence_b)
 print("Similarity Score:", score)
 print("Aligned Sequence A:", aligned_a)
 print("Aligned Sequence B:", aligned_b)
